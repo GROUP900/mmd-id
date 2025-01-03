@@ -1,0 +1,16 @@
+{
+  "name": "@mmd-id/generator",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "assets"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "jimp": "^1.6.0"
+  }
+}

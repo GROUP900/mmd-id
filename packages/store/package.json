@@ -1,0 +1,14 @@
+{
+  "name": "@mmd-id/store",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "build": "tsx render"
+  },
+  "devDependencies": {
+    "@mmd-id/generator": "workspace:*"
+  },
+  "keywords": [],
+  "author": "witcat",
+  "license": "ISC"
+}
