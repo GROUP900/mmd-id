@@ -1,5 +1,9 @@
 {
   "name": "@mmd-id/store",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GROUP900/mmd-id.git"
+  },
   "version": "0.1.0",
   "description": "",
   "scripts": {
