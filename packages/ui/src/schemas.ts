@@ -10,10 +10,7 @@ import {
   OtherKinds,
   PiggieColor,
   PiggieDecoration,
-  Races,
 } from "./constants";
-
-export const raceTypeSchema = v.picklist(Races);
 
 const commonSchema = v.object({
   mood: v.picklist(Moods),
