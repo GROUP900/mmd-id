@@ -1,6 +1,23 @@
-import { useMemo } from "react";
-import { appearanceToResourceKey, useResourceURL } from ".";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  appearanceToResourceKey,
+  Background,
+  Moods,
+  optionsMap,
+  Races,
+  useResourceURL,
+} from ".";
 import { Appearance } from "./types";
+import * as v from "valibot";
+import { schema } from "./schemas";
 
 export const GetFallbackImageOnBadInput = () => {
   const url = useResourceURL("bad-input");
@@ -58,6 +75,131 @@ export const Rounded = () => {
     <>
       <img style={style} src={piggie} width="32" height="32" alt="resource" />
       <img style={style} src={cat} width="32" height="32" alt="resource" />
+    </>
+  );
+};
+
+const RacePropertySelector = ({
+  field,
+  options,
+  setValue,
+}: {
+  field: string;
+  options: string[];
+  setValue: Dispatch<SetStateAction<Record<string, string>>>;
+}) => {
+  const handleSelect = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
+      setValue((prev) => ({ ...prev, [field]: value }));
+    },
+    [field, setValue]
+  );
+  return (
+    <select onChange={handleSelect}>
+      {options.map((i) => (
+        <option value={i}>{i}</option>
+      ))}
+    </select>
+  );
+};
+
+const RaceSelectors = ({
+  raceType,
+  setRace,
+}: {
+  raceType: string;
+  setRace: Dispatch<SetStateAction<Record<string, string>>>;
+}) => {
+  const options = optionsMap[raceType];
+
+  if (!(raceType in optionsMap)) return null;
+  return (
+    <>
+      {Object.entries(options).map(([field, options]) => (
+        <RacePropertySelector
+          key={field}
+          field={field}
+          options={options}
+          setValue={setRace}
+        />
+      ))}
+    </>
+  );
+};
+
+export const Builder = () => {
+  const defaultValue = useMemo<Appearance>(
+    () => ({
+      mood: "sober",
+      background: "#3157E1",
+      race: { type: "bunny", coat: "#D9B391", size: "baby" },
+    }),
+    []
+  );
+  const [type, setType] = useState("bunny");
+  const [background, setBackground] = useState("#3157E1");
+  const [mood, setMood] = useState("sober");
+  const [race, setRace] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const { background, mood, race } = defaultValue;
+    const { type, ...rest } = race;
+    setType(type);
+    setBackground(background);
+    setMood(mood);
+    setRace(rest);
+  }, [defaultValue]);
+
+  const key = useMemo(() => {
+    const data = {
+      mood,
+      background,
+      race: { type, ...race },
+    };
+    const result = v.safeParse(schema, data);
+    if (!result.success) return "default";
+    return appearanceToResourceKey(result.output);
+  }, [background, mood, race, type]);
+  const url = useResourceURL(key);
+
+  const handleRaceChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    setType(e.target.value);
+  }, []);
+  const handleMoodChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    setMood(e.target.value);
+  }, []);
+  const handleBackgroundChange = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      setBackground(e.target.value);
+    },
+    []
+  );
+  return (
+    <>
+      <img src={url} width="32" height="32" alt="resource" />
+      <select value={type} onChange={handleRaceChange}>
+        {Races.map((i) => (
+          <option key={i} value={i}>
+            {i}
+          </option>
+        ))}
+      </select>
+      <select value={background} onChange={handleBackgroundChange}>
+        {Background.map((i) => (
+          <option key={i} value={i}>
+            {i}
+          </option>
+        ))}
+      </select>
+      <select value={mood} onChange={handleMoodChange}>
+        {Moods.map((i) => (
+          <option key={i} value={i}>
+            {i}
+          </option>
+        ))}
+      </select>
+      <RaceSelectors raceType={type} setRace={setRace} />
     </>
   );
 };

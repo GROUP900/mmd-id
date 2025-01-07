@@ -2,22 +2,19 @@ import { useMemo } from "react";
 import {
   AncientCharacters,
   AncientOutfits,
-  Background,
   BunnyCoats,
   BunnySizes,
   DoggieSizes,
-  Moods,
   OtherKinds,
   PiggieColor,
   PiggieDecoration,
-  Races,
 } from "./constants";
 import { Appearance } from "./types";
 import * as v from "valibot";
 import { schema } from "./schemas";
 
 export * from "./constants";
-export { type Appearance } from "./types";
+export * from "./types";
 
 const baseURL = "https://cdn.jsdelivr.net/npm/@mmd-id/store@latest";
 
@@ -112,46 +109,23 @@ export const resoureKeyToAppearance = (input: string): Appearance | null => {
 export const useResourceURL = (input: string) =>
   useMemo(() => getResourceURL(input), [input]);
 
-export const useAppearanceOptions = (race: (typeof Races)[number] | null) =>
-  useMemo(() => {
-    const commonOptions = {
-      race: Races,
-      background: Background,
-    };
-    switch (race ?? "bunny") {
-      case "bunny":
-        return {
-          ...commonOptions,
-          mood: Moods,
-          size: BunnySizes,
-          coat: BunnyCoats,
-        };
-      case "doggie":
-        return {
-          ...commonOptions,
-          mood: Moods,
-          size: DoggieSizes,
-        };
-      case "other":
-        return {
-          ...commonOptions,
-          mood: Moods,
-          kind: OtherKinds,
-        };
-      case "piggie":
-        return {
-          ...commonOptions,
-          mood: Moods,
-          painting: PiggieColor,
-          receiver: PiggieDecoration,
-        };
-      case "ancient":
-        return {
-          ...commonOptions,
-          character: AncientCharacters,
-          outfits: AncientOutfits,
-        };
-      default:
-        return null as never;
-    }
-  }, [race]);
+export const optionsMap: Record<string, Record<string, string[]>> = {
+  bunny: {
+    size: [...BunnySizes],
+    coat: [...BunnyCoats],
+  },
+  doggie: {
+    size: [...DoggieSizes],
+  },
+  other: {
+    kind: [...OtherKinds],
+  },
+  ancient: {
+    character: [...AncientCharacters],
+    outfits: [...AncientOutfits],
+  },
+  piggie: {
+    painting: [...PiggieColor],
+    receiver: [...PiggieDecoration],
+  },
+};

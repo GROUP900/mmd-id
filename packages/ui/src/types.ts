@@ -1,1 +1,1 @@
-export { Appearance } from "../../../shared/types";
+export * from "../../../shared/types";
