@@ -6,7 +6,7 @@ import {
   BunnySizes,
   DoggieSizes,
   Moods,
-  OtherRaces,
+  OtherKinds,
   PiggieColor,
   PiggieDecoration,
 } from "./constants";
@@ -71,7 +71,7 @@ export const generateCombinations = () => {
     ["other"],
     [...Background],
     [...Moods],
-    [...OtherRaces],
+    [...OtherKinds],
   ] as const);
   const ancientCombinations = product([
     ["ancient"],
