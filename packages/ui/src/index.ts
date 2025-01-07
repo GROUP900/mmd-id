@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   AncientCharacters,
   AncientOutfits,
@@ -15,15 +14,22 @@ import { schema } from "./schemas";
 
 export * from "./constants";
 export * from "./types";
+export * from "./schemas";
 
 const baseURL = "https://cdn.jsdelivr.net/npm/@mmd-id/store@latest";
 
+/**
+ * get avatar URL with resource key
+ */
 export const getResourceURL = (input: string) => {
   const appearance = resoureKeyToAppearance(input);
   const key = appearance ? input : "default";
   return `${baseURL}/dist/${encodeURIComponent(key)}.png`;
 };
 
+/**
+ * generate Resource key with appearance object
+ */
 export const appearanceToResourceKey = ({
   race,
   background,
@@ -47,6 +53,9 @@ export const appearanceToResourceKey = ({
   }
 };
 
+/**
+ * generate appearance object with resource key
+ */
 export const resoureKeyToAppearance = (input: string): Appearance | null => {
   if (!input) return null;
   let race: unknown = {};
@@ -106,9 +115,9 @@ export const resoureKeyToAppearance = (input: string): Appearance | null => {
   return result.success ? result.output : null;
 };
 
-export const useResourceURL = (input: string) =>
-  useMemo(() => getResourceURL(input), [input]);
-
+/**
+ * apperance property to options maps
+ */
 export const optionsMap: Record<string, Record<string, string[]>> = {
   bunny: {
     size: [...BunnySizes],

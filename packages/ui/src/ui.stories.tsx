@@ -10,14 +10,17 @@ import {
 import {
   appearanceToResourceKey,
   Background,
+  getResourceURL,
   Moods,
   optionsMap,
   Races,
-  useResourceURL,
 } from ".";
 import { Appearance } from "./types";
 import * as v from "valibot";
 import { schema } from "./schemas";
+
+export const useResourceURL = (input: string) =>
+  useMemo(() => getResourceURL(input), [input]);
 
 export const GetFallbackImageOnBadInput = () => {
   const url = useResourceURL("bad-input");

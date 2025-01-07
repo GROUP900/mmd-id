@@ -13,10 +13,6 @@
     "build": "tsup",
     "dev": "ladle serve"
   },
-  "peerDependencies": {
-    "react": ">=17",
-    "react-dom": ">=17"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
