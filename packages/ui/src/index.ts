@@ -15,9 +15,16 @@ import {
   Races,
 } from "./constants";
 import { Appearance } from "./types";
+import * as v from "valibot";
+import { schema } from "./schemas";
+export * from "./constants";
+export { type Appearance } from "./types";
 
 const baseURL = "https://cdn.jsdelivr.net/npm/@mmd-id/store@latest";
 
+/**
+ * @deprecated use validbot for type checking
+ */
 const getNode = (obj: NestedObject, path: string[]) => {
   let current: NestedObject | boolean = obj;
 
@@ -45,11 +52,17 @@ const getSuggestion = (obj: NestedObject, path: string[] = []): string => {
   return null as never;
 };
 
+/**
+ * @deprecated use validbot for type checking
+ */
 const checkPath = (obj: NestedObject, path: string[]) => {
   const node = getNode(obj, path);
   return typeof node === "boolean";
 };
 
+/**
+ * @deprecated use validbot for type checking
+ */
 export const getResourceURL = (input: string) => {
   const parts = input.split("-");
   const valid = checkPath(validKeysMap, parts);
@@ -78,6 +91,65 @@ export const appearanceToResourceKey = ({
     default:
       return "" as never;
   }
+};
+
+export const resoureKeyToAppearance = (input: string): Appearance | null => {
+  if (!input) return null;
+  let race: unknown = {};
+  let mood = "sober";
+  const [raceType, background, ...rest] = input.split("-");
+  switch (raceType) {
+    case "bunny":
+      {
+        const [_mood, size, coat] = rest;
+        mood = _mood;
+        race = { type: "bunny", size, coat };
+      }
+      break;
+    case "doggie":
+      {
+        const [_mood, size] = rest;
+        mood = _mood;
+        race = { type: "doggie", size };
+      }
+      break;
+    case "piggie":
+      {
+        const [_mood, painting, receiver] = rest;
+        mood = _mood;
+        race = { type: "piggie", painting, receiver };
+      }
+      break;
+    case "ancient":
+      {
+        const [character, outfits] = rest;
+        race = {
+          type: "ancient",
+          character,
+          outfits,
+        };
+      }
+      break;
+    case "other":
+      {
+        const [_mood, _race] = rest;
+        mood = _mood;
+        race = {
+          type: "other",
+          race: _race,
+        };
+      }
+      break;
+    default:
+      return null;
+  }
+  const result = {
+    mood,
+    background,
+    race,
+  };
+
+  return v.parse(schema, result);
 };
 
 export const useResourceURL = (input: string) =>
