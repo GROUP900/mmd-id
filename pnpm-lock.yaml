@@ -33,7 +33,13 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
 
-  packages/hooks:
+  packages/store:
+    devDependencies:
+      '@mmd-id/generator':
+        specifier: workspace:*
+        version: link:../generator
+
+  packages/ui:
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
@@ -65,12 +71,6 @@ importers:
       typescript-eslint:
         specifier: ^8.19.0
         version: 8.19.0(eslint@9.17.0)(typescript@5.7.2)
-
-  packages/store:
-    devDependencies:
-      '@mmd-id/generator':
-        specifier: workspace:*
-        version: link:../generator
 
 packages:
 
