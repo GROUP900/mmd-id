@@ -10,9 +10,8 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "pnpm generate-keys && tsup",
-    "dev": "ladle serve",
-    "generate-keys": "tsx generateValidKeys && prettier --write src/validKeysMap.ts"
+    "build": "tsup",
+    "dev": "ladle serve"
   },
   "peerDependencies": {
     "react": ">=17",

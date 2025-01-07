@@ -1,6 +1,4 @@
 import { useMemo } from "react";
-import { validKeysMap } from "./validKeysMap";
-import { NestedObject } from "../generateValidKeys";
 import {
   AncientCharacters,
   AncientOutfits,
@@ -22,51 +20,9 @@ export { type Appearance } from "./types";
 
 const baseURL = "https://cdn.jsdelivr.net/npm/@mmd-id/store@latest";
 
-/**
- * @deprecated use validbot for type checking
- */
-const getNode = (obj: NestedObject, path: string[]) => {
-  let current: NestedObject | boolean = obj;
-
-  for (let i = 0; i < path.length; i++) {
-    const key = path[i];
-    if (typeof current === "boolean" && i < path.length - 1) return undefined;
-    if (typeof current === "object" && !(key in current)) {
-      return undefined;
-    }
-    if (typeof current === "boolean") return current as never;
-    current = current[key];
-  }
-
-  return current;
-};
-
-const getSuggestion = (obj: NestedObject, path: string[] = []): string => {
-  for (const key in obj) {
-    if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-      return getSuggestion(obj[key] as NestedObject, [...path, key]);
-    } else {
-      return [...path, key].join("-");
-    }
-  }
-  return null as never;
-};
-
-/**
- * @deprecated use validbot for type checking
- */
-const checkPath = (obj: NestedObject, path: string[]) => {
-  const node = getNode(obj, path);
-  return typeof node === "boolean";
-};
-
-/**
- * @deprecated use validbot for type checking
- */
 export const getResourceURL = (input: string) => {
-  const parts = input.split("-");
-  const valid = checkPath(validKeysMap, parts);
-  const key = valid ? input : "default";
+  const appearance = resoureKeyToAppearance(input);
+  const key = appearance ? input : "default";
   return `${baseURL}/dist/${encodeURIComponent(key)}.png`;
 };
 
@@ -143,27 +99,17 @@ export const resoureKeyToAppearance = (input: string): Appearance | null => {
     default:
       return null;
   }
-  const result = {
+  const data = {
     mood,
     background,
     race,
   };
-
-  return v.parse(schema, result);
+  const result = v.safeParse(schema, data);
+  return result.success ? result.output : null;
 };
 
 export const useResourceURL = (input: string) =>
   useMemo(() => getResourceURL(input), [input]);
-
-export const useKeySuggestion = (input: string[]): [string, string[]] =>
-  useMemo(() => {
-    if (!input.length) return ["default", [...Races]];
-    const node = getNode(validKeysMap, input);
-    if (!node) return ["default", []];
-    if (typeof node === "boolean") return [input.join("-"), []];
-    const suggestion = getSuggestion(node, input);
-    return [suggestion, Object.keys(node)];
-  }, [input]);
 
 export const useAppearanceOptions = (race: (typeof Races)[number] | null) =>
   useMemo(() => {
