@@ -15,7 +15,7 @@ export const BunnySizes = ["baby", "small", "medium", "big"] as const;
 
 export const DoggieSizes = ["small", "medium"] as const;
 
-export const OtherRaces = [
+export const OtherKinds = [
   "cat",
   "poodle",
   "longlegBunnie",

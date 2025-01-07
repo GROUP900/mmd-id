@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { appearanceToResourceKey, useKeySuggestion, useResourceURL } from ".";
+import { useMemo } from "react";
+import { appearanceToResourceKey, useResourceURL } from ".";
 import { Appearance } from "./types";
 
 export const GetFallbackImageOnBadInput = () => {
@@ -15,51 +15,6 @@ export const GetFallbackImageOnPartiallyCorrectInput = () => {
 export const GetImageURL = () => {
   const url = useResourceURL("piggie-#3157E1-happy-#d3d3d3-A");
   return <img src={url} width="75" height="75" alt="resource" />;
-};
-
-export const KeySuggestion = () => {
-  const [value, setValue] = useState("");
-  const [suggestion, suggestions] = useKeySuggestion(
-    value ? value.split("-") : []
-  );
-  const url = useResourceURL(suggestion);
-  const handleOnChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value),
-    []
-  );
-
-  const Button = ({
-    i,
-    setValue,
-  }: {
-    i: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-  }) => {
-    const handleClick = useCallback(
-      () => setValue((prev) => (prev += value ? `-${i}` : i)),
-      [i, setValue]
-    );
-    return (
-      <button key={i} onClick={handleClick}>
-        {i}
-      </button>
-    );
-  };
-  return (
-    <>
-      <img src={url} width="75" height="75" />
-      <div>
-        <input
-          value={value}
-          onChange={handleOnChange}
-          placeholder="Type a key"
-        />
-        {suggestions.map((i) => (
-          <Button key={i} i={i} setValue={setValue} />
-        ))}
-      </div>
-    </>
-  );
 };
 
 export const AppearanceToResourceKey = () => {

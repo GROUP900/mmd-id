@@ -7,7 +7,7 @@ import {
   BunnySizes,
   DoggieSizes,
   Moods,
-  OtherRaces,
+  OtherKinds,
   PiggieColor,
   PiggieDecoration,
   Races,
@@ -68,7 +68,7 @@ const otherSchema = v.intersect([
   v.object({
     race: v.object({
       type: v.literal("other"),
-      race: v.picklist(OtherRaces),
+      kind: v.picklist(OtherKinds),
     }),
   }),
 ]);

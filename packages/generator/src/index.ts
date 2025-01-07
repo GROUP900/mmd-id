@@ -39,9 +39,9 @@ export const generate = async ({ background, mood, race }: Appearance) => {
     character = skin.composite(face, 0, 0);
   }
   if (raceType === "other") {
-    const skin = await Jimp.read(`${assetsFolder}/other/${race.race}/skin.png`);
+    const skin = await Jimp.read(`${assetsFolder}/other/${race.kind}/skin.png`);
     const face = await Jimp.read(
-      `${assetsFolder}/other/${race.race}/${mood}.png`
+      `${assetsFolder}/other/${race.kind}/${mood}.png`
     );
     character = skin.composite(face, 0, 0);
   }

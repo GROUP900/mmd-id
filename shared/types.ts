@@ -6,7 +6,7 @@ import {
   BunnySizes,
   DoggieSizes,
   Moods,
-  OtherRaces,
+  OtherKinds,
   PiggieColor,
   PiggieDecoration,
   Races,
@@ -35,7 +35,7 @@ export interface Doggie extends Race {
 
 export interface Other extends Race {
   type: "other";
-  race: (typeof OtherRaces)[number];
+  kind: (typeof OtherKinds)[number];
 }
 
 export interface Ancient extends Race {

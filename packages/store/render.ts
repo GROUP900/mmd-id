@@ -61,13 +61,13 @@ import { generate, generateDefault } from "@mmd-id/generator";
   });
 
   otherCombinations.forEach(async (combination) => {
-    const [raceType, background, mood, race] = combination;
+    const [raceType, background, mood, kind] = combination;
     const buffer = await generate({
       background,
       mood,
       race: {
         type: raceType,
-        race,
+        kind,
       },
     });
     writeFileSync(`dist/${combination.join("-")}.png`, buffer);

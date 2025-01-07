@@ -7,7 +7,7 @@ import {
   BunnySizes,
   DoggieSizes,
   Moods,
-  OtherRaces,
+  OtherKinds,
   PiggieColor,
   PiggieDecoration,
   Races,
@@ -15,6 +15,7 @@ import {
 import { Appearance } from "./types";
 import * as v from "valibot";
 import { schema } from "./schemas";
+
 export * from "./constants";
 export { type Appearance } from "./types";
 
@@ -41,7 +42,7 @@ export const appearanceToResourceKey = ({
         "-"
       );
     case "other":
-      return [race.type, background, mood, race.race].join("-");
+      return [race.type, background, mood, race.kind].join("-");
     case "ancient":
       return [race.type, background, race.character, race.outfits].join("-");
     default:
@@ -88,11 +89,11 @@ export const resoureKeyToAppearance = (input: string): Appearance | null => {
       break;
     case "other":
       {
-        const [_mood, _race] = rest;
+        const [_mood, kind] = rest;
         mood = _mood;
         race = {
           type: "other",
-          race: _race,
+          kind,
         };
       }
       break;
@@ -135,7 +136,7 @@ export const useAppearanceOptions = (race: (typeof Races)[number] | null) =>
         return {
           ...commonOptions,
           mood: Moods,
-          race: OtherRaces,
+          kind: OtherKinds,
         };
       case "piggie":
         return {
